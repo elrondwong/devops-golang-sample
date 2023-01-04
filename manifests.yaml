@@ -1,0 +1,54 @@
+---
+# Source: zeroops-example/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: zeroops-example
+  labels:
+    helm.sh/chart: zeroops-example-0.1.0
+    app.kubernetes.io/name: zeroops-example
+    app.kubernetes.io/instance: zeroops-example
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: zeroops-example
+    app.kubernetes.io/instance: zeroops-example
+---
+# Source: zeroops-example/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zeroops-example
+  labels:
+    helm.sh/chart: zeroops-example-0.1.0
+    app.kubernetes.io/name: zeroops-example
+    app.kubernetes.io/instance: zeroops-example
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: zeroops-example
+      app.kubernetes.io/instance: zeroops-example
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: zeroops-example
+        app.kubernetes.io/instance: zeroops-example
+    spec:
+      containers:
+        - name: zeroops-example
+          image: "zeroops-example:f4fc769"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
